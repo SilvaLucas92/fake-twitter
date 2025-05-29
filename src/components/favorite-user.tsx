@@ -29,10 +29,10 @@ export const FavoriteUser = ({ author, avatar_url }: FavoriteUserProps) => {
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
       <div className="flex items-center space-x-3">
-        <Image
+        <img
           src={avatar_url}
           alt={`${author}'s avatar`}
-          className="h-10 w-10 rounded-full"
+          className="rounded-full w-10 h-10"
         />
         <span className="font-medium text-gray-900">{author}</span>
       </div>

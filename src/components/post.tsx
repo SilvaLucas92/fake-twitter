@@ -77,10 +77,10 @@ export const Post: React.FC<PostProps> = ({ item }) => {
     <article className=" border-gray-200 p-4 hover:bg-gray-50 transition-colors">
       <div className="flex space-x-3">
         <div className="flex-shrink-0">
-          <Image
+          <img
             src={item.avatar_url}
             alt={`${item.author}'s avatar`}
-            className="h-10 w-10 rounded-full"
+            className="rounded-full w-10 h-10"
           />
         </div>
 
