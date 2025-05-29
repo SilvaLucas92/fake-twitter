@@ -10,7 +10,8 @@ async function getProfile() {
     {
       headers: {
         Authorization: token,
-        "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
+        "Application-Token":
+          "79807de2e2ebe41709ff5bf444bc918a10062483d231a5a47d264692041e3597",
       },
       cache: "no-store",
     }
