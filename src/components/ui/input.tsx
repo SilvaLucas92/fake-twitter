@@ -19,7 +19,6 @@ const Input: React.FC<InputProps> = ({
   name,
   type = "text",
   placeholder,
-  autoComplete,
   className,
   ...rest
 }) => {
@@ -52,7 +51,6 @@ const Input: React.FC<InputProps> = ({
           id={id || name}
           name={name}
           type={inputType}
-          autoComplete={autoComplete}
           value={value}
           onChange={onChange}
           disabled={disabled}

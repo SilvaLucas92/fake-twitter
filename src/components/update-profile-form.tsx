@@ -126,9 +126,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
           type="text"
           value={formData.name}
           onChange={handleChange}
-          required
           placeholder="Enter your name"
-          autoComplete="name"
           error={errors.name}
           disabled={isLoading}
         />
@@ -140,9 +138,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
           type="text"
           value={formData.email}
           onChange={handleChange}
-          required
           placeholder="Enter your email"
-          autoComplete="email"
           error={errors.email}
           disabled={isLoading}
         />
@@ -154,7 +150,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
           type="text"
           value={formData.avatar_url}
           onChange={handleChange}
-          required
           placeholder="Enter your avatar URL"
           error={errors.avatar_url}
           disabled={isLoading}
