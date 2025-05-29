@@ -72,7 +72,7 @@ export const CommentForm = ({ postId }: CommentFormProps) => {
       />
       <Button
         type="submit"
-        label="Comment"
+        label={isLoading ? "Submitting" : "Submit"}
         loading={isLoading}
         disabled={isLoading}
       />

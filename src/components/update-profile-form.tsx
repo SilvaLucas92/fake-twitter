@@ -162,7 +162,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 
         <Button
           type="submit"
-          label="Update Profile"
+          label={isLoading ? "Updating Profile" : "Update Profile"}
           loading={isLoading}
           disabled={isLoading}
         />

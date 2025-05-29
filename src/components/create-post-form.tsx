@@ -83,7 +83,6 @@ export function CreatePostForm() {
           name="content"
           value={content}
           onChange={handleContentChange}
-          required
           rows={4}
           placeholder="Share your thoughts..."
           label="What's on your mind?"
@@ -92,7 +91,7 @@ export function CreatePostForm() {
 
         <Button
           type="submit"
-          label="Post"
+          label={isLoading ? "Submitting" : "Submit"}
           loading={isLoading}
           disabled={isLoading}
         />
