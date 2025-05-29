@@ -1,13 +1,18 @@
 import { PostContainer } from "@/components/post-container";
 import { Post } from "@/types/post";
-import { getAuthToken } from "@/utils/auth";
+import { cookies } from "next/headers";
 
 async function getFeed(): Promise<Post[]> {
-  const token = await getAuthToken();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token");
+
+  if (!token) {
+    throw new Error("No authentication token found");
+  }
 
   const response = await fetch("https://tuiter.fragua.com.ar/api/v1/me/feed", {
     headers: {
-      Authorization: token,
+      Authorization: token.value,
       "Application-Token":
         "79807de2e2ebe41709ff5bf444bc918a10062483d231a5a47d264692041e3597",
     },
@@ -23,5 +28,6 @@ async function getFeed(): Promise<Post[]> {
 
 export default async function Home() {
   const feedData = await getFeed();
+
   return <PostContainer initialData={feedData} />;
 }
