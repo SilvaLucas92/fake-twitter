@@ -17,9 +17,11 @@ export default function Error({
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
-      <div className="text-center space-y-4">
+      <div className="flex flex-col items-center justify-center space-y-4">
         <ErrorMsg error={error.message} />
-        <Button onClick={reset} label="Try again" />
+        <div className="flex justify-center">
+          <Button onClick={reset} label="Try again" fullWidth={false} />
+        </div>
       </div>
     </div>
   );

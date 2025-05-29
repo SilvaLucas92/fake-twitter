@@ -100,7 +100,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               href="/auth/register"
-              className="font-medium text-gray-900 hover:underline"
+              className="font-medium text-blue-600 hover:underline"
             >
               Sign up here
             </Link>

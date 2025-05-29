@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/button";
+import { ErrorMsg } from "@/components/ui/error-msg";
 import { useEffect } from "react";
 
 export default function Error({
@@ -15,9 +16,13 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <p className="text-red-500 mb-4">{error.message}</p>
-      <Button onClick={reset} label="Try again" />
+    <div className="max-w-2xl mx-auto py-8 px-4">
+      <div className="flex flex-col items-center justify-center space-y-4">
+        <ErrorMsg error={error.message} />
+        <div className="flex justify-center">
+          <Button onClick={reset} label="Try again" fullWidth={false} />
+        </div>
+      </div>
     </div>
   );
 }
