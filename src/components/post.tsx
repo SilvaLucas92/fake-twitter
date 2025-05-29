@@ -5,7 +5,6 @@ import { Heart, MessageCircle, Star } from "lucide-react";
 import { Post as PostType } from "@/types/post";
 import { getClientAuthToken } from "@/utils/client-auth";
 import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
-import Image from "next/image";
 
 interface PostProps {
   item: PostType;
