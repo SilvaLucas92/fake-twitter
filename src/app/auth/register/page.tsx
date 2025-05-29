@@ -84,7 +84,6 @@ export default function Register() {
         throw new Error(data.message || "Failed to create account");
       }
 
-      localStorage.setItem("token", data.token);
       router.push("/auth/login");
     } catch (err) {
       setError(
