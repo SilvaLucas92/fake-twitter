@@ -97,7 +97,7 @@ export default function Login() {
             Welcome back
           </h2>
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/auth/register"
               className="font-medium text-blue-600 hover:underline"

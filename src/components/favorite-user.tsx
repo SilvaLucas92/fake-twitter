@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 interface FavoriteUserProps {
@@ -15,7 +16,9 @@ export const FavoriteUser = ({ author, avatar_url }: FavoriteUserProps) => {
     const favorites = JSON.parse(
       localStorage.getItem("favorite_users") || "[]"
     );
-    const newFavorites = favorites.filter((fav: any) => fav.author !== author);
+    const newFavorites = favorites.filter(
+      (fav: FavoriteUserProps) => fav.author !== author
+    );
     localStorage.setItem("favorite_users", JSON.stringify(newFavorites));
     setIsFavorite(false);
     window.location.reload();
@@ -26,7 +29,7 @@ export const FavoriteUser = ({ author, avatar_url }: FavoriteUserProps) => {
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
       <div className="flex items-center space-x-3">
-        <img
+        <Image
           src={avatar_url}
           alt={`${author}'s avatar`}
           className="h-10 w-10 rounded-full"

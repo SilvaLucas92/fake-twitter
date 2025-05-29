@@ -18,7 +18,6 @@ const Textarea: React.FC<TextareaProps> = ({
   id,
   name,
   placeholder,
-  required,
   className,
   ...rest
 }) => {

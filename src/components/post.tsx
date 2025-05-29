@@ -5,6 +5,7 @@ import { Heart, MessageCircle, Star } from "lucide-react";
 import { Post as PostType } from "@/types/post";
 import { getClientAuthToken } from "@/utils/client-auth";
 import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import Image from "next/image";
 
 interface PostProps {
   item: PostType;
@@ -31,7 +32,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
     }
   }, [item.author]);
 
-  const handleFavorite = (e: React.MouseEvent) => {
+  const handleFavorite = () => {
     const favorites: FavoriteUser[] = JSON.parse(
       localStorage.getItem("favorite_users") || "[]"
     );
@@ -76,7 +77,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
     <article className=" border-gray-200 p-4 hover:bg-gray-50 transition-colors">
       <div className="flex space-x-3">
         <div className="flex-shrink-0">
-          <img
+          <Image
             src={item.avatar_url}
             alt={`${item.author}'s avatar`}
             className="h-10 w-10 rounded-full"
@@ -87,7 +88,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
           <div className="flex items-center space-x-2">
             <h4 className="font-bold text-gray-900">{item.author}</h4>
             <button
-              onClick={handleFavorite}
+              onClick={() => handleFavorite()}
               className={`transition-colors cursor-pointer ${
                 isFavorite
                   ? "text-yellow-500"

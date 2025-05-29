@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Send } from "lucide-react";
 import { getClientAuthToken } from "@/utils/client-auth";
 import Button from "./ui/button";
 import Textarea from "./ui/textarea";

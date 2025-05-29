@@ -20,7 +20,6 @@ const Input: React.FC<InputProps> = ({
   type = "text",
   placeholder,
   autoComplete,
-  required,
   className,
   ...rest
 }) => {
