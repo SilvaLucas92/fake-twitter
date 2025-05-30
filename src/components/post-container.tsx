@@ -7,7 +7,8 @@ import { useState, useEffect } from "react";
 import { FavoriteUser } from "./favorite-user";
 import { useFetch } from "@/hooks/useFetch";
 import { Spinner } from "@/components/ui/spinner";
-import { ErrorMsg } from "./ui/error-msg";
+import { Notification } from "./ui/notification";
+import { BASE_URL } from "@/utils/apiUtils";
 
 interface FavoriteUserType {
   author: string;
@@ -22,7 +23,7 @@ export const PostContainer = () => {
     isLoading,
     error,
     refetch,
-  } = useFetch<PostType[]>("https://tuiter.fragua.com.ar/api/v1/me/feed");
+  } = useFetch<PostType[]>(`${BASE_URL}/me/feed`);
 
   useEffect(() => {
     const storedFavorites = JSON.parse(
@@ -45,7 +46,7 @@ export const PostContainer = () => {
   if (error) {
     return (
       <Container>
-        <ErrorMsg error={error} />
+        <Notification type="error" message={`Error loading posts: ${error}`} />
       </Container>
     );
   }

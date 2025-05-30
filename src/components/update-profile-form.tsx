@@ -3,12 +3,18 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getClientAuthToken } from "@/utils/client-auth";
-import { ErrorMsg } from "./ui/error-msg";
+import { Notification } from "./ui/notification";
 import { BASE_URL } from "@/utils/apiUtils";
 import { useFetch } from "@/hooks/useFetch";
 import { Spinner } from "./ui/spinner";
 import Input from "./ui/input";
 import Button from "./ui/button";
+import { ArrowLeft } from "lucide-react";
+
+interface Status {
+  type: "error" | "success" | null;
+  message: string;
+}
 
 interface ProfileData {
   name: string;
@@ -19,7 +25,10 @@ interface ProfileData {
 export function ProfileForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState<Status>({
+    type: null,
+    message: "",
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const {
@@ -63,7 +72,7 @@ export function ProfileForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setStatus({ type: null, message: "" });
 
     if (!validateForm()) {
       return;
@@ -92,9 +101,20 @@ export function ProfileForm() {
         throw new Error("Failed to update profile");
       }
 
-      router.push("/");
+      setStatus({
+        type: "success",
+        message: "Profile updated successfully! Redirecting...",
+      });
+
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update profile");
+      setStatus({
+        type: "error",
+        message:
+          err instanceof Error ? err.message : "Failed to update profile",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -122,17 +142,30 @@ export function ProfileForm() {
   if (profileError) {
     return (
       <div className="max-w-2xl mx-auto mt-10 p-6">
-        <ErrorMsg error={`Error loading profile: ${profileError}`} />
+        <Notification
+          type="error"
+          message={`Error loading profile: ${profileError}`}
+        />
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h2>
+    <div className="max-w-2xl mx-auto p-6">
+      <div className="flex items-center gap-4 mb-4">
+        <button
+          onClick={() => router.back()}
+          className="text-gray-600 hover:text-gray-900 cursor-pointer"
+        >
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+        <h4 className="text-xl font-semibold text-gray-900">Update Profile</h4>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <ErrorMsg error={error} />}
+        {status.type && (
+          <Notification type={status.type} message={status.message} />
+        )}
 
         <Input
           label="Name"

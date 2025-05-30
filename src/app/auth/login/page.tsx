@@ -8,7 +8,7 @@ import Input from "@/components/ui/input";
 import { clientCookies } from "@/utils/cookies";
 import { validateEmail } from "@/utils/validate-email";
 import { BASE_URL } from "@/utils/apiUtils";
-import { ErrorMsg } from "@/components/ui/error-msg";
+import { Notification } from "@/components/ui/notification";
 
 export default function Login() {
   const router = useRouter();
@@ -90,12 +90,12 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-left">
-          <h2 className="mt-6 text-4xl font-extrabold text-gray-900">
+          <h4 className="mt-6 text-4xl font-extrabold text-gray-900">
             Welcome back
-          </h2>
+          </h4>
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
             <Link
@@ -107,7 +107,7 @@ export default function Login() {
           </p>
         </div>
 
-        {error && <ErrorMsg error={error} />}
+        {error && <Notification type="error" message={error} />}
 
         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
           <Input

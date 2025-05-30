@@ -4,8 +4,13 @@ import React, { useState } from "react";
 import { getClientAuthToken } from "@/utils/client-auth";
 import Button from "./ui/button";
 import Textarea from "./ui/textarea";
-import { ErrorMsg } from "./ui/error-msg";
+import { Notification } from "./ui/notification";
 import { BASE_URL } from "@/utils/apiUtils";
+
+interface Status {
+  type: "error" | "success" | null;
+  message: string;
+}
 
 interface CommentFormProps {
   postId: string;
@@ -16,12 +21,15 @@ export const CommentForm = ({ postId, refetchReplies }: CommentFormProps) => {
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
-  const [serverError, setServerError] = useState("");
+  const [status, setStatus] = useState<Status>({
+    type: null,
+    message: "",
+  });
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError("");
-    setServerError("");
+    setStatus({ type: null, message: "" });
 
     if (!comment.trim()) {
       setValidationError("Please write a comment before submitting");
@@ -47,11 +55,25 @@ export const CommentForm = ({ postId, refetchReplies }: CommentFormProps) => {
       }
 
       setComment("");
-      setServerError("");
+      setStatus({
+        type: "success",
+        message: "Comment posted successfully!",
+      });
+      setTimeout(
+        () =>
+          setStatus({
+            type: null,
+            message: "",
+          }),
+        2500
+      );
       await refetchReplies();
     } catch (error) {
       console.error("Error posting comment:", error);
-      setServerError("Failed to post comment. Please try again.");
+      setStatus({
+        type: "error",
+        message: "Failed to post comment. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +81,9 @@ export const CommentForm = ({ postId, refetchReplies }: CommentFormProps) => {
 
   return (
     <form onSubmit={handleSubmitComment} className="space-y-2">
-      {serverError && <ErrorMsg error={serverError} />}
+      {status.type && (
+        <Notification type={status.type} message={status.message} />
+      )}
       <Textarea
         value={comment}
         onChange={(e) => {

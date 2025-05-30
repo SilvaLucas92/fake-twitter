@@ -6,8 +6,13 @@ import Link from "next/link";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import { BASE_URL } from "@/utils/apiUtils";
-import { ErrorMsg } from "@/components/ui/error-msg";
 import { validateEmail } from "@/utils/validate-email";
+import { Notification } from "@/components/ui/notification";
+
+interface Status {
+  type: "error" | "success" | null;
+  message: string;
+}
 
 export default function Register() {
   const router = useRouter();
@@ -22,7 +27,10 @@ export default function Register() {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState<Status>({
+    type: null,
+    message: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
@@ -54,14 +62,13 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setStatus({ type: null, message: "" });
 
     if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-
     try {
       const headers: HeadersInit = {
         "Content-Type": "application/json",
@@ -85,13 +92,22 @@ export default function Register() {
         throw new Error(data.message || "Failed to create account");
       }
 
-      router.push("/auth/login");
+      setStatus({
+        type: "success",
+        message: "Account created successfully! Redirecting to login...",
+      });
+
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 5000);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to create account. Please try again."
-      );
+      setStatus({
+        type: "error",
+        message:
+          err instanceof Error
+            ? err.message
+            : "Failed to create account. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -107,12 +123,12 @@ export default function Register() {
   };
 
   return (
-    <div className=" flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-left">
-          <h2 className="mt-6 text-4xl font-extrabold text-gray-900">
+          <h4 className="mt-6 text-4xl font-extrabold text-gray-900">
             Create you account!
-          </h2>
+          </h4>
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link
@@ -124,7 +140,9 @@ export default function Register() {
           </p>
         </div>
 
-        {error && <ErrorMsg error={error} />}
+        {status.type && (
+          <Notification type={status.type} message={status.message} />
+        )}
 
         <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
           <Input

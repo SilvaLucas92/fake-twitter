@@ -5,8 +5,14 @@ import { useRouter } from "next/navigation";
 import Textarea from "@/components/ui/textarea";
 import Button from "@/components/ui/button";
 import { getClientAuthToken } from "@/utils/client-auth";
-import { ErrorMsg } from "./ui/error-msg";
+import { Notification } from "./ui/notification";
 import { BASE_URL } from "@/utils/apiUtils";
+import { ArrowLeft } from "lucide-react";
+
+interface Status {
+  type: "error" | "success" | null;
+  message: string;
+}
 
 export function CreatePostForm() {
   const router = useRouter();
@@ -17,7 +23,10 @@ export function CreatePostForm() {
     return "";
   });
   const [validationError, setValidationError] = useState("");
-  const [serverError, setServerError] = useState("");
+  const [status, setStatus] = useState<Status>({
+    type: null,
+    message: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -32,7 +41,7 @@ export function CreatePostForm() {
     e.preventDefault();
 
     setValidationError("");
-    setServerError("");
+    setStatus({ type: null, message: "" });
     setIsLoading(true);
 
     if (!content.trim()) {
@@ -59,22 +68,41 @@ export function CreatePostForm() {
         throw new Error("Failed to create post");
       }
 
+      setStatus({
+        type: "success",
+        message: "Post created successfully! Redirecting...",
+      });
+
       localStorage.removeItem("draft_post");
-      router.push("/");
+
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } catch (err) {
-      setServerError(
-        err instanceof Error ? err.message : "Failed to create post"
-      );
+      setStatus({
+        type: "error",
+        message: err instanceof Error ? err.message : "Failed to create post",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Post</h2>
+    <div className="max-w-2xl mx-auto p-6">
+      <div className="flex items-center gap-4 mb-4">
+        <button
+          onClick={() => router.back()}
+          className="text-gray-600 hover:text-gray-900 cursor-pointer"
+        >
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+        <h4 className="text-xl font-semibold text-gray-900">New Post</h4>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {serverError && <ErrorMsg error={serverError} />}
+        {status.type && (
+          <Notification type={status.type} message={status.message} />
+        )}
         <Textarea
           id="content"
           name="content"
@@ -82,7 +110,6 @@ export function CreatePostForm() {
           onChange={handleContentChange}
           rows={4}
           placeholder="Share your thoughts..."
-          label="What's on your mind?"
           error={validationError}
         />
 
