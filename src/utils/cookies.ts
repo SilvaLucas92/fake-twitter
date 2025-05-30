@@ -8,7 +8,7 @@ export const clientCookies = {
     Cookies.set(name, value, {
       ...options,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
     });
   },
