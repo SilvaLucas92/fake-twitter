@@ -6,6 +6,7 @@ import Textarea from "@/components/ui/textarea";
 import Button from "@/components/ui/button";
 import { getClientAuthToken } from "@/utils/client-auth";
 import { ErrorMsg } from "./ui/error-msg";
+import { BASE_URL } from "@/utils/apiUtils";
 
 export function CreatePostForm() {
   const router = useRouter();
@@ -41,20 +42,17 @@ export function CreatePostForm() {
 
     try {
       const token = getClientAuthToken();
-      const response = await fetch(
-        "https://tuiter.fragua.com.ar/api/v1/me/tuits",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-            "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
-          },
-          body: JSON.stringify({
-            message: content.trim(),
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/me/tuits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+          "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
+        },
+        body: JSON.stringify({
+          message: content.trim(),
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
-import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import { BASE_URL } from "@/utils/apiUtils";
 import { ErrorMsg } from "@/components/ui/error-msg";
 import { validateEmail } from "@/utils/validate-email";
 
@@ -65,7 +65,8 @@ export default function Register() {
     try {
       const headers: HeadersInit = {
         "Content-Type": "application/json",
-        "Application-Token": API_TOKEN as string,
+        "Application-Token": process.env
+          .NEXT_PUBLIC_API_TOKEN as string as string,
       };
 
       const response = await fetch(`${BASE_URL}/users`, {

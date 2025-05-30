@@ -5,7 +5,7 @@ import { getClientAuthToken } from "@/utils/client-auth";
 import Button from "./ui/button";
 import Textarea from "./ui/textarea";
 import { ErrorMsg } from "./ui/error-msg";
-import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import { BASE_URL } from "@/utils/apiUtils";
 
 interface CommentFormProps {
   postId: string;
@@ -35,7 +35,7 @@ export const CommentForm = ({ postId }: CommentFormProps) => {
         method: "POST",
         headers: {
           Authorization: token,
-          "Application-Token": API_TOKEN as string,
+          "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ message: comment }),

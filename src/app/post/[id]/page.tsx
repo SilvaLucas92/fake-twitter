@@ -53,29 +53,18 @@ async function getPostAndReplies(
   return { post, replies };
 }
 
-const fakePost: PostType = {
-  author: "test",
-  avatar_url: "https://ui-avatars.com/api/?name=test",
-  date: "2025-05-29T03:04:14.986Z",
-  id: 350,
-  liked: false,
-  likes: 0,
-  message: "te",
-  parent_id: 0,
-};
-
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function PostDetail({ params }: PageProps) {
   const { id } = await params;
-  const { replies } = await getPostAndReplies(id);
+  const { replies, post } = await getPostAndReplies(id);
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <div className="border-b border-gray-200 pb-6">
-        <Post item={fakePost} />
+        <Post item={post} />
       </div>
 
       <div className="mt-6 border-b border-gray-200 pb-6">

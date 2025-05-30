@@ -7,7 +7,7 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import { clientCookies } from "@/utils/cookies";
 import { validateEmail } from "@/utils/validate-email";
-import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import { BASE_URL } from "@/utils/apiUtils";
 import { ErrorMsg } from "@/components/ui/error-msg";
 
 export default function Login() {
@@ -58,7 +58,7 @@ export default function Login() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Application-token": API_TOKEN as string,
+          "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
         },
         body: JSON.stringify(formData),
       });

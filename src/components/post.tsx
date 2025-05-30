@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Heart, MessageCircle, Star } from "lucide-react";
 import { Post as PostType } from "@/types/post";
 import { getClientAuthToken } from "@/utils/client-auth";
-import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import { BASE_URL } from "@/utils/apiUtils";
 
 interface PostProps {
   item: PostType;
@@ -56,7 +56,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
         method,
         headers: {
           Authorization: token,
-          "Application-Token": API_TOKEN as string,
+          "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
         },
       });
 

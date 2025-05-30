@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
 import { getClientAuthToken } from "@/utils/client-auth";
-import { API_TOKEN, BASE_URL } from "@/utils/apiUtils";
+import { BASE_URL } from "@/utils/apiUtils";
 import { ErrorMsg } from "./ui/error-msg";
 
 const validateEmail = (email: string) => {
@@ -80,7 +80,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
-          "Application-Token": API_TOKEN as string,
+          "Application-Token": process.env.NEXT_PUBLIC_API_TOKEN as string,
         },
         body: JSON.stringify({
           name: formData.name,
