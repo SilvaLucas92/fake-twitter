@@ -2,47 +2,46 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Input from "@/components/ui/input";
-import Button from "@/components/ui/button";
 import { getClientAuthToken } from "@/utils/client-auth";
-import { BASE_URL } from "@/utils/apiUtils";
 import { ErrorMsg } from "./ui/error-msg";
+import { BASE_URL } from "@/utils/apiUtils";
+import { useFetch } from "@/hooks/useFetch";
+import { Spinner } from "./ui/spinner";
+import Input from "./ui/input";
+import Button from "./ui/button";
 
-const validateEmail = (email: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-interface ProfileFormProps {
-  initialData: {
-    name: string;
-    email: string;
-    avatar_url: string;
-  };
+interface ProfileData {
+  name: string;
+  email: string;
+  avatar_url: string;
 }
 
-export function ProfileForm({ initialData }: ProfileFormProps) {
+export function ProfileForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [formData, setFormData] = useState({
-    name: initialData.name,
-    email: initialData.email,
-    avatar_url: initialData.avatar_url,
-  });
-  const [errors, setErrors] = useState({
+  const {
+    data: profile,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useFetch<ProfileData>(`${BASE_URL}/me/profile`);
+
+  const [formData, setFormData] = useState<ProfileData>({
     name: "",
     email: "",
     avatar_url: "",
   });
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (profile) {
+      setFormData(profile);
+    }
+  }, [profile]);
 
   const validateForm = () => {
-    const newErrors = {
-      name: "",
-      email: "",
-      avatar_url: "",
-    };
+    const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
@@ -50,7 +49,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!validateEmail(formData.email.trim())) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Invalid email format";
     }
 
@@ -59,7 +58,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
     }
 
     setErrors(newErrors);
-    return !newErrors.name && !newErrors.email && !newErrors.avatar_url;
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,11 +89,9 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile");
+        throw new Error("Failed to update profile");
       }
 
-      router.refresh();
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update profile");
@@ -107,10 +104,28 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (errors[name as keyof typeof errors]) {
+    if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
+
+  if (isProfileLoading) {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6">
+        <div className="flex items-center justify-center min-h-[500px]">
+          <Spinner />
+        </div>
+      </div>
+    );
+  }
+
+  if (profileError) {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6">
+        <ErrorMsg error={`Error loading profile: ${profileError}`} />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6">

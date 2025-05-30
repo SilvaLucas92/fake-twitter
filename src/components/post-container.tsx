@@ -5,19 +5,24 @@ import { Post as PostType } from "@/types/post";
 import { Container } from "@/components/ui/container";
 import { useState, useEffect } from "react";
 import { FavoriteUser } from "./favorite-user";
-
-interface PostContainerProps {
-  initialData: PostType[];
-}
+import { useFetch } from "@/hooks/useFetch";
+import { Spinner } from "@/components/ui/spinner";
+import { ErrorMsg } from "./ui/error-msg";
 
 interface FavoriteUserType {
   author: string;
   avatar_url: string;
 }
 
-export const PostContainer = ({ initialData }: PostContainerProps) => {
+export const PostContainer = () => {
   const [activeTab, setActiveTab] = useState<"feed" | "favorites">("feed");
   const [favorites, setFavorites] = useState<FavoriteUserType[]>([]);
+  const {
+    data: posts,
+    isLoading,
+    error,
+    refetch,
+  } = useFetch<PostType[]>("https://tuiter.fragua.com.ar/api/v1/me/feed");
 
   useEffect(() => {
     const storedFavorites = JSON.parse(
@@ -26,6 +31,24 @@ export const PostContainer = ({ initialData }: PostContainerProps) => {
 
     setFavorites(storedFavorites);
   }, []);
+
+  if (isLoading) {
+    return (
+      <Container>
+        <div className="flex items-center justify-center min-h-[500px]">
+          <Spinner />
+        </div>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <ErrorMsg error={error} />
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -60,10 +83,10 @@ export const PostContainer = ({ initialData }: PostContainerProps) => {
         <article className="flex flex-col">
           {activeTab === "feed" && (
             <div>
-              {initialData.length > 0 ? (
-                initialData.map((item) => (
+              {posts && posts.length > 0 ? (
+                posts.map((item) => (
                   <div key={item.id} className="border-b border-gray-200">
-                    <Post item={item} />
+                    <Post item={item} refetch={refetch} />
                   </div>
                 ))
               ) : (

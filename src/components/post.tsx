@@ -5,9 +5,12 @@ import { Heart, MessageCircle, Star } from "lucide-react";
 import { Post as PostType } from "@/types/post";
 import { getClientAuthToken } from "@/utils/client-auth";
 import { BASE_URL } from "@/utils/apiUtils";
+import { useRouter } from "next/navigation";
 
 interface PostProps {
   item: PostType;
+  refetch: () => Promise<void>;
+  isDetail?: boolean;
 }
 
 interface FavoriteUser {
@@ -15,9 +18,10 @@ interface FavoriteUser {
   avatar_url: string;
 }
 
-export const Post: React.FC<PostProps> = ({ item }) => {
+export const Post: React.FC<PostProps> = ({ item, refetch, isDetail }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -64,7 +68,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
         throw new Error("Failed to update like");
       }
 
-      window.location.reload();
+      await refetch();
     } catch (error) {
       console.error("Error updating like:", error);
     } finally {
@@ -73,7 +77,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
   };
 
   return (
-    <article className=" border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+    <article className="border-gray-200 p-4 hover:bg-gray-50 transition-colors">
       <div className="flex space-x-3">
         <div className="flex-shrink-0">
           <img
@@ -87,7 +91,7 @@ export const Post: React.FC<PostProps> = ({ item }) => {
           <div className="flex items-center space-x-2">
             <h4 className="font-bold text-gray-900">{item.author}</h4>
             <button
-              onClick={() => handleFavorite()}
+              onClick={handleFavorite}
               className={`transition-colors cursor-pointer ${
                 isFavorite
                   ? "text-yellow-500"
@@ -105,8 +109,13 @@ export const Post: React.FC<PostProps> = ({ item }) => {
 
           <div className="mt-3 flex items-center space-x-6">
             <button
-              className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors cursor-pointer"
-              onClick={() => (window.location.href = `/post/${item.id}`)}
+              className={`flex items-center space-x-2 text-gray-500 transition-colors cursor-pointer ${
+                !isDetail && "hover:text-blue-500"
+              }`}
+              onClick={() => {
+                router.push(`/post/${item.id}`);
+              }}
+              disabled={isDetail}
             >
               <MessageCircle className="h-5 w-5" />
             </button>

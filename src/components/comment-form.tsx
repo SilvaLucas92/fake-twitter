@@ -9,9 +9,10 @@ import { BASE_URL } from "@/utils/apiUtils";
 
 interface CommentFormProps {
   postId: string;
+  refetchReplies: () => Promise<void>;
 }
 
-export const CommentForm = ({ postId }: CommentFormProps) => {
+export const CommentForm = ({ postId, refetchReplies }: CommentFormProps) => {
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
@@ -47,7 +48,7 @@ export const CommentForm = ({ postId }: CommentFormProps) => {
 
       setComment("");
       setServerError("");
-      window.location.reload();
+      await refetchReplies();
     } catch (error) {
       console.error("Error posting comment:", error);
       setServerError("Failed to post comment. Please try again.");
