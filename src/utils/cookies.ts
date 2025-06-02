@@ -1,21 +1,16 @@
-import Cookies from "js-cookie";
-
 export const clientCookies = {
   get: (name: string): string | undefined => {
-    return Cookies.get(name);
+    const cookies = document.cookie.split(";");
+    const cookie = cookies.find((c) => c.trim().startsWith(`${name}=`));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : undefined;
   },
-  set: (name: string, value: string, options?: Cookies.CookieAttributes) => {
-    Cookies.set(name, value, {
-      ...options,
-      secure: true,
-      sameSite: "none",
-      path: "/",
-    });
+  set: (name: string, value: string) => {
+    const cookieValue = encodeURIComponent(value);
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    document.cookie = `${name}=${cookieValue}; path=/; secure; samesite=none; expires=${expires.toUTCString()}`;
   },
-  remove: (name: string, options?: Cookies.CookieAttributes) => {
-    Cookies.remove(name, {
-      ...options,
-      path: "/",
-    });
+  remove: (name: string) => {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   },
 };

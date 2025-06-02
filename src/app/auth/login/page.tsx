@@ -69,7 +69,7 @@ export default function Login() {
         throw new Error(data.message || "Invalid email or password");
       }
 
-      clientCookies.set("auth_token", data.token, { expires: 7 });
+      clientCookies.set("auth_token", data.token);
       router.push("/");
     } catch (err) {
       setError(
