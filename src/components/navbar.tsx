@@ -15,7 +15,7 @@ const Navbar = () => {
       <Container className="py-3">
         <div className="flex items-center justify-between">
           <Link
-            href={"/"}
+            href={!AUTH_PATHS.includes(pathname) ? "/" : ""}
             className="text-xl md:text-2xl font-bold text-gray-800 hover:text-gray-600 transition-colors"
           >
             <h1>Twitter</h1>
