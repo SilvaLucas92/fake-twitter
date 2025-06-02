@@ -77,7 +77,7 @@ export function CreatePostForm() {
 
       setTimeout(() => {
         router.push("/");
-      }, 2000);
+      }, 1000);
     } catch (err) {
       setStatus({
         type: "error",

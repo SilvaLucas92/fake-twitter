@@ -23,7 +23,7 @@ export const PostContainer = () => {
     isLoading,
     error,
     refetch,
-  } = useFetch<PostType[]>(`${BASE_URL}/me/feed`);
+  } = useFetch<PostType[]>(`${BASE_URL}/me/feed?only_parents=true`);
 
   useEffect(() => {
     const storedFavorites = JSON.parse(
@@ -32,6 +32,8 @@ export const PostContainer = () => {
 
     setFavorites(storedFavorites);
   }, []);
+
+  console.log(posts);
 
   if (isLoading) {
     return (

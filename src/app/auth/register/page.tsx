@@ -99,7 +99,7 @@ export default function Register() {
 
       setTimeout(() => {
         router.push("/auth/login");
-      }, 5000);
+      }, 1000);
     } catch (err) {
       setStatus({
         type: "error",

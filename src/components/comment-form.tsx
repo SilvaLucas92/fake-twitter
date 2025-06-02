@@ -65,7 +65,7 @@ export const CommentForm = ({ postId, refetchReplies }: CommentFormProps) => {
             type: null,
             message: "",
           }),
-        2500
+        1000
       );
       await refetchReplies();
     } catch (error) {
