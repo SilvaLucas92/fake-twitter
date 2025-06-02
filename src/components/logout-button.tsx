@@ -9,6 +9,7 @@ const LogoutButton = () => {
   const handleLogout = () => {
     clientCookies.remove("auth_token");
     router.push("/auth/login");
+    router.refresh();
   };
 
   return (
