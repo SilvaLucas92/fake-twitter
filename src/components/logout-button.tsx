@@ -8,6 +8,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     clientCookies.remove("auth_token");
+    localStorage.removeItem("draft_post");
     router.push("/auth/login");
     router.refresh();
   };
