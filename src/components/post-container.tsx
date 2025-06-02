@@ -33,8 +33,6 @@ export const PostContainer = () => {
     setFavorites(storedFavorites);
   }, []);
 
-  console.log(posts);
-
   if (isLoading) {
     return (
       <Container>
