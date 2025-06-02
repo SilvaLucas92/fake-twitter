@@ -179,7 +179,7 @@ export function ProfileForm() {
           disabled={isLoading}
         />
 
-        <Input
+        {/* <Input
           label="Email"
           id="email"
           name="email"
@@ -189,7 +189,7 @@ export function ProfileForm() {
           placeholder="Enter your email"
           error={errors.email}
           disabled={isLoading}
-        />
+        /> */}
 
         <Input
           label="Avatar URL"
